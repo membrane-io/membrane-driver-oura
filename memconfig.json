@@ -1,0 +1,527 @@
+{
+  "schema": {
+    "types": [
+      {
+        "name": "Root",
+        "actions": [
+          {
+            "name": "run",
+            "type": "Void"
+          },
+          {
+            "name": "configure",
+            "type": "Void",
+            "params": [
+              {
+                "name": "personalAccessToken",
+                "type": "String"
+              }
+            ]
+          }
+        ],
+        "fields": [
+          {
+            "name": "status",
+            "type": "String"
+          },
+          {
+            "name": "daily",
+            "type": "Daily",
+            "params": []
+          }
+        ],
+        "events": [
+          {
+            "name": "statusChanged",
+            "type": "Void",
+            "description": "The status of the Oura driver updated."
+          }
+        ]
+      },
+      {
+        "name": "Daily",
+        "actions": [
+          {
+            "name": "activity",
+            "type": "DailyActivityCollection",
+            "params": [
+              {
+                "name": "startDate",
+                "type": "String",
+                "optional": true
+              },
+              {
+                "name": "endDate",
+                "type": "String",
+                "optional": true
+              },
+              {
+                "name": "nextToken",
+                "type": "String",
+                "optional": true
+              }
+            ]
+          },
+          {
+            "name": "sleep",
+            "type": "DailySleepCollection",
+            "params": [
+              {
+                "name": "startDate",
+                "type": "String",
+                "optional": true
+              },
+              {
+                "name": "endDate",
+                "type": "String",
+                "optional": true
+              },
+              {
+                "name": "nextToken",
+                "type": "String",
+                "optional": true
+              }
+            ]
+          },
+          {
+            "name": "spo2",
+            "type": "DailySpO2Collection",
+            "params": [
+              {
+                "name": "startDate",
+                "type": "String",
+                "optional": true
+              },
+              {
+                "name": "endDate",
+                "type": "String",
+                "optional": true
+              },
+              {
+                "name": "nextToken",
+                "type": "String",
+                "optional": true
+              }
+            ]
+          },
+          {
+            "name": "readiness",
+            "type": "DailyReadinessCollection",
+            "params": [
+              {
+                "name": "startDate",
+                "type": "String",
+                "optional": true
+              },
+              {
+                "name": "endDate",
+                "type": "String",
+                "optional": true
+              },
+              {
+                "name": "nextToken",
+                "type": "String",
+                "optional": true
+              }
+            ]
+          },
+          {
+            "name": "stress",
+            "type": "DailyStressCollection",
+            "params": [
+              {
+                "name": "startDate",
+                "type": "String",
+                "optional": true
+              },
+              {
+                "name": "endDate",
+                "type": "String",
+                "optional": true
+              },
+              {
+                "name": "nextToken",
+                "type": "String",
+                "optional": true
+              }
+            ]
+          }
+        ],
+        "fields": []
+      },
+      {
+        "name": "DailyActivityCollection",
+        "fields": [
+          {
+            "name": "items",
+            "type": "List",
+            "ofType": "DailyActivity"
+          }
+        ]
+      },
+      {
+        "name": "DailyActivity",
+        "fields": [
+          {
+            "name": "id",
+            "type": "String"
+          },
+          {
+            "name": "class_5_min",
+            "type": "String"
+          },
+          {
+            "name": "score",
+            "type": "Int"
+          },
+          {
+            "name": "active_calories",
+            "type": "Int"
+          },
+          {
+            "name": "average_met_minutes",
+            "type": "Float"
+          },
+          {
+            "name": "contributors",
+            "type": "ActivityContributors"
+          },
+          {
+            "name": "equivalent_walking_distance",
+            "type": "Int"
+          },
+          {
+            "name": "high_activity_met_minutes",
+            "type": "Int"
+          },
+          {
+            "name": "high_activity_time",
+            "type": "Int"
+          },
+          {
+            "name": "inactivity_alerts",
+            "type": "Int"
+          },
+          {
+            "name": "low_activity_met_minutes",
+            "type": "Int"
+          },
+          {
+            "name": "low_activity_time",
+            "type": "Int"
+          },
+          {
+            "name": "medium_activity_met_minutes",
+            "type": "Int"
+          },
+          {
+            "name": "medium_activity_time",
+            "type": "Int"
+          },
+          {
+            "name": "met",
+            "type": "Json"
+          },
+          {
+            "name": "meters_to_target",
+            "type": "Int"
+          },
+          {
+            "name": "non_wear_time",
+            "type": "Int"
+          },
+          {
+            "name": "resting_time",
+            "type": "Int"
+          },
+          {
+            "name": "sedentary_met_minutes",
+            "type": "Int"
+          },
+          {
+            "name": "sedentary_time",
+            "type": "Int"
+          },
+          {
+            "name": "steps",
+            "type": "Int"
+          },
+          {
+            "name": "target_calories",
+            "type": "Int"
+          },
+          {
+            "name": "target_meters",
+            "type": "Int"
+          },
+          {
+            "name": "total_calories",
+            "type": "Int"
+          },
+          {
+            "name": "day",
+            "type": "String"
+          },
+          {
+            "name": "timestamp",
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "ActivityContributors",
+        "fields": [
+          {
+            "name": "meet_daily_targets",
+            "type": "Int"
+          },
+          {
+            "name": "move_every_hour",
+            "type": "Int"
+          },
+          {
+            "name": "recovery_time",
+            "type": "Int"
+          },
+          {
+            "name": "stay_active",
+            "type": "Int"
+          },
+          {
+            "name": "training_frequency",
+            "type": "Int"
+          },
+          {
+            "name": "training_volume",
+            "type": "Int"
+          }
+        ]
+      },
+      {
+        "name": "DailySleepCollection",
+        "fields": [
+          {
+            "name": "items",
+            "type": "List",
+            "ofType": "DailySleep"
+          }
+        ]
+      },
+      {
+        "name": "DailySleep",
+        "fields": [
+          {
+            "name": "id",
+            "type": "String"
+          },
+          {
+            "name": "day",
+            "type": "String"
+          },
+          {
+            "name": "score",
+            "type": "Int"
+          },
+          {
+            "name": "timestamp",
+            "type": "String"
+          },
+          {
+            "name": "contributors",
+            "type": "Ref",
+            "ofType": "SleepContributors"
+          }
+        ]
+      },
+      {
+        "name": "SleepContributors",
+        "fields": [
+          {
+            "name": "deep_sleep",
+            "type": "Int"
+          },
+          {
+            "name": "efficiency",
+            "type": "Int"
+          },
+          {
+            "name": "latency",
+            "type": "Int"
+          },
+          {
+            "name": "rem_sleep",
+            "type": "Int"
+          },
+          {
+            "name": "restfulness",
+            "type": "Int"
+          },
+          {
+            "name": "timing",
+            "type": "Int"
+          },
+          {
+            "name": "total_sleep",
+            "type": "Int"
+          }
+        ]
+      },
+      {
+        "name": "DailySpO2Collection",
+        "fields": [
+          {
+            "name": "items",
+            "type": "List",
+            "ofType": "DailySpO2"
+          }
+        ]
+      },
+      {
+        "name": "DailySpO2",
+        "fields": [
+          {
+            "name": "id",
+            "type": "String"
+          },
+          {
+            "name": "day",
+            "type": "String"
+          },
+          {
+            "name": "spo2_percentage",
+            "type": "Ref",
+            "ofType": "DailySpO2AggregatedValues"
+          }
+        ]
+      },
+      {
+        "name": "DailySpO2AggregatedValues",
+        "fields": [
+          {
+            "name": "average",
+            "type": "Float"
+          }
+        ]
+      },
+      {
+        "name": "DailyReadinessCollection",
+        "fields": [
+          {
+            "name": "items",
+            "type": "List",
+            "ofType": "DailyReadiness"
+          }
+        ]
+      },
+      {
+        "name": "DailyReadiness",
+        "fields": [
+          {
+            "name": "id",
+            "type": "String"
+          },
+          {
+            "name": "contributors",
+            "type": "Ref",
+            "ofType": "ReadinessContributors"
+          },
+          {
+            "name": "day",
+            "type": "String"
+          },
+          {
+            "name": "score",
+            "type": "Int"
+          },
+          {
+            "name": "temperature_deviation",
+            "type": "Float"
+          },
+          {
+            "name": "temperature_trend_deviation",
+            "type": "Float"
+          },
+          {
+            "name": "timestamp",
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "ReadinessContributors",
+        "fields": [
+          {
+            "name": "activity_balance",
+            "type": "Int"
+          },
+          {
+            "name": "body_temperature",
+            "type": "Int"
+          },
+          {
+            "name": "hrv_balance",
+            "type": "Int"
+          },
+          {
+            "name": "previous_day_activity",
+            "type": "Int"
+          },
+          {
+            "name": "previous_night",
+            "type": "Int"
+          },
+          {
+            "name": "recovery_index",
+            "type": "Int"
+          },
+          {
+            "name": "resting_heart_rate",
+            "type": "Int"
+          },
+          {
+            "name": "sleep_balance",
+            "type": "Int"
+          }
+        ]
+      },
+      {
+        "name": "DailyStressCollection",
+        "fields": [
+          {
+            "name": "items",
+            "type": "List",
+            "ofType": "DailyStress"
+          }
+        ]
+      },
+      {
+        "name": "DailyStress",
+        "fields": [
+          {
+            "name": "id",
+            "type": "String"
+          },
+          {
+            "name": "day",
+            "type": "String"
+          },
+          {
+            "name": "stress_high",
+            "type": "Int"
+          },
+          {
+            "name": "recovery_high",
+            "type": "Int"
+          },
+          {
+            "name": "day_summary",
+            "type": "String"
+          }
+        ]
+      }
+    ]
+  },
+  "dependencies": {
+    "http": "http:"
+  }
+}
