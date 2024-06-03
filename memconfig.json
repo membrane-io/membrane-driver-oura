@@ -25,9 +25,20 @@
             "type": "String"
           },
           {
-            "name": "daily",
-            "type": "Daily",
-            "params": []
+            "name": "dailySleep",
+            "type": "DailySleepCollection"
+          },
+          {
+            "name": "dailyActivity",
+            "type": "DailyActivityCollection"
+          },
+          {
+            "name": "dailyReadiness",
+            "type": "DailyReadinessCollection"
+          },
+          {
+            "name": "dailyStress",
+            "type": "DailyStressCollection"
           }
         ],
         "events": [
@@ -35,127 +46,6 @@
             "name": "statusChanged",
             "type": "Void",
             "description": "The status of the Oura driver updated."
-          }
-        ]
-      },
-      {
-        "name": "Daily",
-        "actions": [
-          {
-            "name": "activity",
-            "type": "DailyActivityCollection",
-            "params": [
-              {
-                "name": "startDate",
-                "type": "String",
-                "optional": true
-              },
-              {
-                "name": "endDate",
-                "type": "String",
-                "optional": true
-              },
-              {
-                "name": "nextToken",
-                "type": "String",
-                "optional": true
-              }
-            ]
-          },
-          {
-            "name": "sleep",
-            "type": "DailySleepCollection",
-            "params": [
-              {
-                "name": "startDate",
-                "type": "String",
-                "optional": true
-              },
-              {
-                "name": "endDate",
-                "type": "String",
-                "optional": true
-              },
-              {
-                "name": "nextToken",
-                "type": "String",
-                "optional": true
-              }
-            ]
-          },
-          {
-            "name": "spo2",
-            "type": "DailySpO2Collection",
-            "params": [
-              {
-                "name": "startDate",
-                "type": "String",
-                "optional": true
-              },
-              {
-                "name": "endDate",
-                "type": "String",
-                "optional": true
-              },
-              {
-                "name": "nextToken",
-                "type": "String",
-                "optional": true
-              }
-            ]
-          },
-          {
-            "name": "readiness",
-            "type": "DailyReadinessCollection",
-            "params": [
-              {
-                "name": "startDate",
-                "type": "String",
-                "optional": true
-              },
-              {
-                "name": "endDate",
-                "type": "String",
-                "optional": true
-              },
-              {
-                "name": "nextToken",
-                "type": "String",
-                "optional": true
-              }
-            ]
-          },
-          {
-            "name": "stress",
-            "type": "DailyStressCollection",
-            "params": [
-              {
-                "name": "startDate",
-                "type": "String",
-                "optional": true
-              },
-              {
-                "name": "endDate",
-                "type": "String",
-                "optional": true
-              },
-              {
-                "name": "nextToken",
-                "type": "String",
-                "optional": true
-              }
-            ]
-          }
-        ],
-        "fields": []
-      },
-      {
-        "name": "DailyActivityCollection",
-        "fields": [
-          {
-            "name": "items",
-            "type": "List",
-            "ofType": "DailyActivity"
           }
         ]
       },
@@ -298,16 +188,6 @@
         ]
       },
       {
-        "name": "DailySleepCollection",
-        "fields": [
-          {
-            "name": "items",
-            "type": "List",
-            "ofType": "DailySleep"
-          }
-        ]
-      },
-      {
         "name": "DailySleep",
         "fields": [
           {
@@ -328,7 +208,7 @@
           },
           {
             "name": "contributors",
-            "type": "Ref",
+            "type": "SleepContributors",
             "ofType": "SleepContributors"
           }
         ]
@@ -367,16 +247,6 @@
         ]
       },
       {
-        "name": "DailySpO2Collection",
-        "fields": [
-          {
-            "name": "items",
-            "type": "List",
-            "ofType": "DailySpO2"
-          }
-        ]
-      },
-      {
         "name": "DailySpO2",
         "fields": [
           {
@@ -404,16 +274,6 @@
         ]
       },
       {
-        "name": "DailyReadinessCollection",
-        "fields": [
-          {
-            "name": "items",
-            "type": "List",
-            "ofType": "DailyReadiness"
-          }
-        ]
-      },
-      {
         "name": "DailyReadiness",
         "fields": [
           {
@@ -422,7 +282,7 @@
           },
           {
             "name": "contributors",
-            "type": "Ref",
+            "type": "ReadinessContributors",
             "ofType": "ReadinessContributors"
           },
           {
@@ -485,16 +345,6 @@
         ]
       },
       {
-        "name": "DailyStressCollection",
-        "fields": [
-          {
-            "name": "items",
-            "type": "List",
-            "ofType": "DailyStress"
-          }
-        ]
-      },
-      {
         "name": "DailyStress",
         "fields": [
           {
@@ -518,6 +368,264 @@
             "type": "String"
           }
         ]
+      },
+      {
+        "name": "DailySleepPage",
+        "fields": [
+          {
+            "name": "items",
+            "type": "List",
+            "ofType": "DailySleep"
+          },
+          {
+            "name": "next",
+            "type": "Ref",
+            "ofType": "DailySleepPage"
+          }
+        ]
+      },
+      {
+        "name": "DailySleepCollection",
+        "fields": [
+          {
+            "name": "one",
+            "type": "DailySleep",
+            "params": [
+              {
+                "name": "id",
+                "type": "String"
+              }
+            ]
+          },
+          {
+            "name": "page",
+            "type": "DailySleepPage",
+            "params": [
+              {
+                "name": "startDate",
+                "type": "String",
+                "optional": true
+              },
+              {
+                "name": "endDate",
+                "type": "String",
+                "optional": true
+              },
+              {
+                "name": "page",
+                "type": "Int",
+                "optional": true
+              },
+              {
+                "name": "pageSize",
+                "type": "Int",
+                "optional": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "DailyStressPage",
+        "fields": [
+          {
+            "name": "items",
+            "type": "List",
+            "ofType": "DailyStress"
+          },
+          {
+            "name": "next",
+            "type": "Ref",
+            "ofType": "DailyStressPage"
+          }
+        ]
+      },
+      {
+        "name": "DailyStressCollection",
+        "fields": [
+          {
+            "name": "one",
+            "type": "DailyStress",
+            "params": [
+              {
+                "name": "id",
+                "type": "String"
+              }
+            ]
+          },
+          {
+            "name": "page",
+            "type": "DailyStressPage",
+            "params": [
+              {
+                "name": "startDate",
+                "type": "String",
+                "optional": true
+              },
+              {
+                "name": "endDate",
+                "type": "String",
+                "optional": true
+              },
+              {
+                "name": "page",
+                "type": "Int",
+                "optional": true
+              },
+              {
+                "name": "pageSize",
+                "type": "Int",
+                "optional": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "DailyReadinessPage",
+        "fields": [
+          {
+            "name": "items",
+            "type": "List",
+            "ofType": "DailyReadiness"
+          },
+          {
+            "name": "next",
+            "type": "Ref",
+            "ofType": "DailyReadinessPage"
+          }
+        ]
+      },
+      {
+        "name": "DailySpO2Page",
+        "fields": [
+          {
+            "name": "items",
+            "type": "List",
+            "ofType": "DailySpO2"
+          },
+          {
+            "name": "next",
+            "type": "Ref",
+            "ofType": "DailySpO2Page"
+          }
+        ]
+      },
+      {
+        "name": "DailySpO2Collection",
+        "fields": [
+          {
+            "name": "items",
+            "type": "List",
+            "ofType": "DailySpO2"
+          },
+          {
+            "name": "one",
+            "type": "DailySpO2"
+          },
+          {
+            "name": "page",
+            "type": "DailySpO2Page"
+          }
+        ]
+      },
+      {
+        "name": "DailyActivityPage",
+        "fields": [
+          {
+            "name": "items",
+            "type": "List",
+            "ofType": "DailyActivity"
+          },
+          {
+            "name": "next",
+            "type": "Ref",
+            "ofType": "DailyActivityPage"
+          }
+        ]
+      },
+      {
+        "name": "DailyActivityCollection",
+        "fields": [
+          {
+            "name": "one",
+            "type": "DailyActivity",
+            "params": [
+              {
+                "name": "id",
+                "type": "String"
+              }
+            ]
+          },
+          {
+            "name": "page",
+            "type": "DailyActivityPage",
+            "params": [
+              {
+                "name": "startDate",
+                "type": "String",
+                "optional": true
+              },
+              {
+                "name": "endDate",
+                "type": "String",
+                "optional": true
+              },
+              {
+                "name": "page",
+                "type": "Int",
+                "optional": true
+              },
+              {
+                "name": "pageSize",
+                "type": "Int",
+                "optional": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "DailyReadinessCollection",
+        "fields": [
+          {
+            "name": "one",
+            "type": "DailyReadiness",
+            "params": [
+              {
+                "name": "id",
+                "type": "String"
+              }
+            ]
+          },
+          {
+            "name": "page",
+            "type": "DailyReadinessPage",
+            "params": [
+              {
+                "name": "startDate",
+                "type": "String",
+                "optional": true
+              },
+              {
+                "name": "endDate",
+                "type": "String",
+                "optional": true
+              },
+              {
+                "name": "page",
+                "type": "Int",
+                "optional": true
+              },
+              {
+                "name": "pageSize",
+                "type": "Int",
+                "optional": true
+              }
+            ]
+          }
+        ],
+        "actions": []
       }
     ]
   },
