@@ -99,6 +99,8 @@ export const Root: resolvers.Root = {
   dailyStress: () => ({}),
 };
 
+// TODO: extract reusable helpers for all Daily<Metric>Collection resolvers
+
 export const DailySleep: resolvers.DailySleep = {
   gref: (_, { obj }) => root.dailySleep.one({ id: obj.id }),
 };
