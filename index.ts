@@ -1,84 +1,16 @@
 /**
- * Driver for Oura
+ * Driver for Oura.
  *
+ * Full coverage of the Oura V2 API is not yet implemented.
  * See the [Oura V2 API docs](https://cloud.ouraring.com/v2/docs) for more information.
  */
 
-import { root, state, resolvers } from "membrane";
+import { root, state, resolvers, values } from "membrane";
+import { api, paginate } from "./helpers";
 
 export interface State {
   personalAccessToken?: string;
 }
-
-/**
- * HELPERS
- */
-
-const OURA_V2_API_URL = "https://api.ouraring.com/v2/usercollection";
-
-const api = async <T>(path: string): Promise<T> => {
-  const response = await fetch(`${OURA_V2_API_URL}${path}`, {
-    method: "GET", // all Oura V2 API requests are GET, except webhooks
-    headers: { Authorization: `Bearer ${state.personalAccessToken}` },
-  });
-
-  if (response.status !== 200) {
-    throw new Error(`HTTP ${response.status}: ${await response.text()}`);
-  }
-
-  return response.json();
-};
-
-// TODO: clean up and/or extract helper(s)
-// Nits - FIXME:
-// 1. Pagination sorts in chronological order on each page
-// 2. Pagination includes bordering items on prev/next page
-const paginate = (args: {
-  startDate?: string;
-  endDate?: string;
-  page?: number;
-  pageSize?: number;
-}) => {
-  const ONE_DAY_IN_MS = 1000 * 60 * 60 * 24;
-  let { startDate, endDate, page, pageSize } = args;
-  let nextArgs;
-
-  page = Math.max(page ?? 1, 1);
-  pageSize = Math.min(10, pageSize ?? 7); // TODO: bound by actual Oura API limit?
-
-  const end = endDate ? new Date(endDate) : new Date();
-  const start = startDate ? new Date(startDate) : new Date();
-
-  if (end.getTime() - start.getTime() > pageSize * ONE_DAY_IN_MS) {
-    end.setTime(end.getTime() - (page - 1) * pageSize * ONE_DAY_IN_MS);
-    start.setTime(end.getTime() - pageSize * ONE_DAY_IN_MS);
-
-    nextArgs = {
-      startDate,
-      endDate,
-      page: page + 1,
-      pageSize,
-    };
-  } else {
-    if (!startDate) {
-      start.setTime(end.getTime() - (pageSize - 1) * ONE_DAY_IN_MS);
-    }
-    nextArgs = null;
-  }
-
-  const searchParams = new URLSearchParams();
-  searchParams.append("start_date", start.toISOString().split("T")[0]);
-  searchParams.append("end_date", end.toISOString().split("T")[0]);
-
-  return {
-    params: searchParams.toString(),
-    nextArgs,
-  };
-};
-
-/**
- * FIELDS, ACTIONS
- */
 
 export const Root: resolvers.Root = {
   status() {
@@ -87,7 +19,7 @@ export const Root: resolvers.Root = {
       : "Ready";
   },
 
-  // To set up a personal access token: https://cloud.ouraring.com/personal-access-tokens/new
+  // To set up a token: https://cloud.ouraring.com/personal-access-tokens/new
   async configure({ personalAccessToken }) {
     state.personalAccessToken = personalAccessToken;
     root.statusChanged.$emit();
@@ -99,27 +31,13 @@ export const Root: resolvers.Root = {
   dailyStress: () => ({}),
 };
 
-// TODO: extract reusable helpers for all Daily<Metric>Collection resolvers
-
 export const DailySleep: resolvers.DailySleep = {
   gref: (_, { obj }) => root.dailySleep.one({ id: obj.id }),
 };
 
 export const DailySleepCollection: resolvers.DailySleepCollection = {
   one: ({ id }) => api(`/daily_sleep/${id}`),
-
-  page: async (args, { self }) => {
-    const { params, nextArgs } = paginate(args);
-
-    const { data } = await api<{ data: resolvers.DailySleep }>(
-      `/daily_sleep?${params}`
-    );
-
-    return {
-      items: data,
-      next: nextArgs ? self.page(nextArgs) : null,
-    };
-  },
+  page: async (args, { self }) => paginate("/daily_sleep", args, self),
 };
 
 export const DailyActivity: resolvers.DailyActivity = {
@@ -128,19 +46,7 @@ export const DailyActivity: resolvers.DailyActivity = {
 
 export const DailyActivityCollection: resolvers.DailyActivityCollection = {
   one: ({ id }) => api(`/daily_activity/${id}`),
-
-  page: async (args, { self }) => {
-    const { params, nextArgs } = paginate(args);
-
-    const { data } = await api<{ data: resolvers.DailyActivity }>(
-      `/daily_activity?${params}`
-    );
-
-    return {
-      items: data,
-      next: nextArgs ? self.page(nextArgs) : null,
-    };
-  },
+  page: async (args, { self }) => paginate("/daily_activity", args, self),
 };
 
 export const DailyReadiness: resolvers.DailyReadiness = {
@@ -149,19 +55,7 @@ export const DailyReadiness: resolvers.DailyReadiness = {
 
 export const DailyReadinessCollection: resolvers.DailyReadinessCollection = {
   one: ({ id }) => api(`/daily_readiness/${id}`),
-
-  page: async (args, { self }) => {
-    const { params, nextArgs } = paginate(args);
-
-    const { data } = await api<{ data: resolvers.DailyReadiness }>(
-      `/daily_readiness?${params}`
-    );
-
-    return {
-      items: data,
-      next: nextArgs ? self.page(nextArgs) : null,
-    };
-  },
+  page: async (args, { self }) => paginate("/daily_readiness", args, self),
 };
 
 export const DailyStress: resolvers.DailyStress = {
@@ -170,17 +64,5 @@ export const DailyStress: resolvers.DailyStress = {
 
 export const DailyStressCollection: resolvers.DailyStressCollection = {
   one: ({ id }) => api(`/daily_stress/${id}`),
-
-  page: async (args, { self }) => {
-    const { params, nextArgs } = paginate(args);
-
-    const { data } = await api<{ data: resolvers.DailyStress }>(
-      `/daily_stress?${params}`
-    );
-
-    return {
-      items: data,
-      next: nextArgs ? self.page(nextArgs) : null,
-    };
-  },
+  page: async (args, { self }) => paginate("/daily_stress", args, self),
 };

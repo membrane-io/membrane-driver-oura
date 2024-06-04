@@ -62,7 +62,10 @@
           },
           {
             "name": "score",
-            "type": "Int"
+            "type": "Int",
+            "hints": {
+              "primary": true
+            }
           },
           {
             "name": "active_calories",
@@ -150,7 +153,10 @@
           },
           {
             "name": "day",
-            "type": "String"
+            "type": "String",
+            "hints": {
+              "primary": true
+            }
           },
           {
             "name": "timestamp",
@@ -196,11 +202,17 @@
           },
           {
             "name": "day",
-            "type": "String"
+            "type": "String",
+            "hints": {
+              "primary": true
+            }
           },
           {
             "name": "score",
-            "type": "Int"
+            "type": "Int",
+            "hints": {
+              "primary": true
+            }
           },
           {
             "name": "timestamp",
@@ -287,11 +299,17 @@
           },
           {
             "name": "day",
-            "type": "String"
+            "type": "String",
+            "hints": {
+              "primary": true
+            }
           },
           {
             "name": "score",
-            "type": "Int"
+            "type": "Int",
+            "hints": {
+              "primary": true
+            }
           },
           {
             "name": "temperature_deviation",
@@ -353,11 +371,17 @@
           },
           {
             "name": "day",
-            "type": "String"
+            "type": "String",
+            "hints": {
+              "primary": true
+            }
           },
           {
             "name": "stress_high",
-            "type": "Int"
+            "type": "Int",
+            "hints": {
+              "primary": true
+            }
           },
           {
             "name": "recovery_high",
