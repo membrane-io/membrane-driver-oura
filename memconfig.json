@@ -63,7 +63,8 @@
             "params": [
               {
                 "name": "id",
-                "type": "String"
+                "type": "String",
+                "description": "The unique identifier for the daily sleep record"
               }
             ]
           },
